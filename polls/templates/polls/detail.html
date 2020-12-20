@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %} 설문조사 앱 {% endblock %}
+{% block content %}
+{% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'polls/style.css' %}">
+    <h1>{{question.question_text}}</h1>
+    {% if error_message %} <p><strong>{{error_message}}</strong></p>{% endif %}
+    <form action="{% url 'polls:vote' question.id %}" method="post">
+    {% csrf_token %}
+    {% for choice in question.choice_set.all %}
+    <input type ="radio" name="choice" id="choice{{forloop.counter}}" value="{{choice.id}}">
+    <label for ="choice{{forloop.counter}}">{{choice.choice_text}}</label><br>
+    {% endfor %}
+    <input type="submit" value="Vote">
+    </form>
+    <a class="return" href="{% url 'polls:index' %}">목록으로 돌아가기</a>
+{% endblock %}
